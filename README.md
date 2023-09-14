@@ -36,7 +36,3 @@ $ flutter run --flavor production --target lib/main_production.dart
 ```
 
 _\*Flutter Atlanta Packages Example works on iOS, Android, Web, and Windows._
-
-
--
-
