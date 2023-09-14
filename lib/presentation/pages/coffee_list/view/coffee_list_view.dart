@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_atlanta_packages_example/domain/errors/request_exception.dart';
 import 'package:flutter_atlanta_packages_example/domain/models/coffee.dart';
+import 'package:flutter_atlanta_packages_example/presentation/l10n/l10n.dart';
 import 'package:flutter_atlanta_packages_example/presentation/pages/coffee_list/cubit/coffee_list_cubit.dart';
+import 'package:flutter_atlanta_packages_example/presentation/pages/coffee_list/view/widgets/coffee_card.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class CoffeeListView extends StatelessWidget {
   const CoffeeListView({super.key});
@@ -11,7 +14,11 @@ class CoffeeListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Coffee'),
+        title: Text(
+          AppLocalizations.of(context).coffee,
+          style: Theme.of(context).textTheme.displaySmall,
+        ),
+        centerTitle: false,
       ),
       body: BlocBuilder<CoffeeListCubit, CoffeeListState>(
         builder: (context, state) {
@@ -47,10 +54,20 @@ class _Loaded extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: coffee.length,
-      itemBuilder: (context, index) => ListTile(
-        title: Text(coffee[index].title),
+    return GridView.custom(
+      padding: const EdgeInsets.all(8),
+      gridDelegate: SliverQuiltedGridDelegate(
+        crossAxisCount: 3,
+        repeatPattern: QuiltedGridRepeatPattern.inverted,
+        pattern: [
+          const QuiltedGridTile(2, 2),
+          const QuiltedGridTile(1, 1),
+          const QuiltedGridTile(1, 1),
+        ],
+      ),
+      childrenDelegate: SliverChildBuilderDelegate(
+        (context, index) => CoffeeCard(coffee: coffee[index]),
+        childCount: coffee.length,
       ),
     );
   }
